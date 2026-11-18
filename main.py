@@ -1,4 +1,4 @@
-
+import json
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from parking_hr import ParkingHR, save_json_hr, load_json_hr
@@ -187,7 +187,18 @@ def load():
 
 def clear_log():
     log_list.delete(0, tk.END)
+def json_preview():
+    data = {"spaces": parking.spaces}
+    content = json.dumps(data, ensure_ascii=False, indent=2)
 
+    preview = tk.Toplevel(root)
+    preview.title("JSON előnézet")
+    preview.geometry("450x400")
+
+    text = tk.Text(preview, wrap="none")
+    text.pack(fill="both", expand=True, padx=10, pady=10)
+    text.insert("1.0", content)
+    text.config(state="disabled")
 
 def select_space(event):
     items = canvas.find_overlapping(event.x, event.y, event.x, event.y)
@@ -227,6 +238,10 @@ ttk.Button(buttons, text="Megnyitás", command=load).pack(
 ttk.Button(buttons, text="Napló törlése", command=clear_log).pack(
     side="left", padx=4
 )
+ttk.Button(buttons, text="JSON előnézet", command=json_preview).pack(
+    side="left", padx=4
+)
+
 ttk.Button(buttons, text="Kilépés", command=root.destroy).pack(
     side="left", padx=4
 )
